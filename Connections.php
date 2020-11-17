@@ -16,7 +16,7 @@ class Connections {
     } catch (Exception $e) {
       echo "Error : ".$e->getMessage();
     }
-    return $this->connect
+    return $this->connect;
   }
   public function closeConnection(){
     $this->connect = null;

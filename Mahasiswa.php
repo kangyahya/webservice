@@ -25,12 +25,12 @@ class Mahasiswa{
   }
   public function getMahasiswa(){
     $objAr = new ActiveRecord();
-    $sql = "SELECT * FROM tbl_webservice WHERE 1=1";
+    $sql = "SELECT * FROM tbl_webservice WHERE 1=1 ";
     if($this->getName()){
       $sql .="AND nama_mhs LIKE '%{$this->getName()}%'";
     }
     if($this->getUmur()){
-      $sql .="AND umur_mhs LIKE '%{$this->getUmur()}%'";
+      $sql .="AND usia_mhs LIKE '%{$this->getUmur()}%'";
     }
     return $objAr->fetchObject($sql);
   }

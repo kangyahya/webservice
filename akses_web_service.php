@@ -17,7 +17,7 @@
     if ($_GET) {
       $s_name = isset($_GET['name']) ? $_GET['name'] : '';
       $s_umur = isset($_GET['umur']) ? $_GET['umur'] : '';
-      $url = "http://localhost/webservice/web_service.php?apikey=123&name={$s_name}&umur={$s_umur}";
+      $url = "http://".$_SERVER['HTTP_HOST']."/webservice/web_service.php?apikey=123&name={$s_name}&umur={$s_umur}";
 
       $fields = [
         'name' => $s_name,
@@ -26,8 +26,7 @@
       $data = http_build_query($fields);
       $options = array(
         'http'=> array(
-
-            'header' => "content-type : application/x-www-form-urlencoded\r\n",
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n"."Content-Length: " . strlen($data) . "\r\n",
             'method' => 'GET',
             'content'=> $data
           ),

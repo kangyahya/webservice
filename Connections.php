@@ -29,8 +29,8 @@ class ActiveRecord extends Connections{
       $data = $this->getConnection()->prepare($sql);
       $data->setFetchMode(PDO::FETCH_INTO, $this);
       $data->execute();
-      foreach($data->fetch() as $dt){
-        $clone[] = clone $dt;
+      while($result = $data->fetch()){
+        $clone[] = clone $result;
       }
       $this->closeConnection();
     } catch (Exception $e) {

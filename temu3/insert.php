@@ -1,27 +1,15 @@
 <?php
-if (isset($_GET["id"])) {
-  $id = (int) $_GET['id'];
-  $getFile = file_get_contents('people.json');
-  $jsonFile = json_decode($getFile, true);
-  $jsonFile = $jsonFile["records"];
-  $jsonFile = $jsonFile[$id];
-}
-if (isset($_POST["id"])) {
-  $id = (int) $_POST['id'];
-  $getFile = file_get_contents('people.json');
-  $all = json_decode($getFile, true);
-  $jsonFile = $all["records"];
-  $jsonFile = $jsonFile[$id];
-  $post["fname"] = isset($_POST['fname']) ? $_POST['fname'] : '' ;
-  $post["lname"] = isset($_POST['lname']) ? $_POST['lname'] : '' ;
-  $post["age"] = isset($_POST['age']) ? $_POST['age'] : '' ;
-  $post["gender"] = isset($_POST['gender']) ? $_POST['gender'] : '' ;
-  if ($jsonFile) {
-    unset($all["records"][$id]);
-    $all["records"][$id] = $post;
-    $all["records"] = array_values($all["records"]);
-    file_put_contents('people.json', json_encode($all));
-  }
+if (!empty($_POST)) {
+  $fname = $_POST['fname'];
+  $lname = $_POST['lname'];
+  $age = $_POST['age'];
+  $gender = $_POST['gender'];
+  $file = file_get_contents('http://localhost/webservice/temu3/people.json');
+  $data = json_decode($file, true);
+  unset($_POST['add']);
+  $data["records"] = array_values($data["records"]);
+  array_push($data["records"],$_POST);
+  file_put_contents('people.json', json_encode($data));
   header('location:tampil.php');
 }
 ?>
@@ -65,36 +53,33 @@ if (isset($_POST["id"])) {
       <div class="row">
         <div class="col-sm-5 col-sm-offset-3">
           <h3>Tambah Pengguna Baru</h3>
-          <?php if (isset($_GET["id"])): ?>
           <form action="" method="post">
-            <input type="hidden" name="id" value="<?=$id?>">
             <div class="form-group">
               <label for="inputFName">Nama Depan</label>
-              <input type="text" name="fname" class="form-control" required id="inputFName" placeholder="Fisrt Name" value="<?=$jsonFile["fname"]?>"><span class="help-block"></span>
+              <input type="text" name="fname" class="form-control" required id="inputFName" placeholder="Fisrt Name"><span class="help-block"></span>
             </div>
             <div class="form-group">
               <label for="inputLName">Nama Belakang</label>
-              <input type="text" name="lname" class="form-control" required id="inputLName" placeholder="Last Name" value="<?=$jsonFile["lname"]?>"><span class="help-block"></span>
+              <input type="text" name="lname" class="form-control" required id="inputLName" placeholder="Last Name"><span class="help-block"></span>
             </div>
             <div class="form-group">
               <label for="inputAge">Usia</label>
-              <input type="number" name="age" class="form-control" required id="inputAge" placeholder="AGE" value="<?=$jsonFile["age"]?>"><span class="help-block"></span>
+              <input type="number" name="age" class="form-control" required id="inputAge" placeholder="AGE"><span class="help-block"></span>
             </div>
             <div class="form-group">
               <label for="inputJk">Jenis Kelamin</label>
               <select name="gender" class="form-control" required id="inputJk">
                 <option value="">Please Select</option>
-                <option value="Male" <?=($jsonFile["gender"]=="Male")?"selected":"" ?>>Male</option>
-                <option value="Female" <?=($jsonFile["gender"]=="Female")?"selected":"" ?>>Female</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
               </select>
               <span class="help-block"></span>
             </div>
             <div class="form-actions">
-              <button type="submit" class="btn btn-success">U B A H   D A T A</button>
+              <button type="submit" class="btn btn-success">T A M B A H</button>
               <a href="tampil.php" class="btn btn-default">B A C K</a>
             </div>
           </form>
-        <?php endif; ?>
         </div>
       </div>
     </div>
